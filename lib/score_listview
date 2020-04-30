@@ -1,0 +1,120 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+class ScoreSheet_optim extends StatefulWidget {
+  @override _ScoreSheet_optimState createState() => _ScoreSheet_optimState();
+}
+
+class _ScoreSheet_optimState extends State<ScoreSheet_optim> {
+  List<List<int>> scoreTable;
+  List<List<int>> totalTable;
+  
+  _ScoreSheet_optimState() {
+    scoreTable = new List();
+    for(int x = 0; x < 10; x++) {
+      scoreTable.add(new List());
+      for(int y = 0; y < 10; y++) {
+        scoreTable[x].add(y);
+      }
+    }
+    print("-------------score table-------------");
+    print(scoreTable);
+    totalTable = new List();
+    for(int x = 0; x < scoreTable.length; x++) {
+      totalTable.add(new List());
+      totalTable[x].add(0);
+      for(int y = 0; y < scoreTable[0].length; y++) {
+        totalTable[x].add(scoreTable[x][y] + totalTable[x][y]);
+      }
+    }
+    print("-------------total table-------------");
+    print(totalTable);
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> nameRow = new List();
+    for(int i = 0; i < scoreTable.length; i++) {
+      nameRow.add(Container(
+          width: 200,
+          child: Text("Player " + i.toString()),
+          padding: EdgeInsets.all(40),
+          margin: EdgeInsets.all(4),
+          color: Colors.green[300],
+      ));
+    }
+    
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        width:  scoreTable.length * 208.0,
+        child: ListView.builder(
+          shrinkWrap: true,
+          //padding: EdgeInsets.all(8),
+          itemCount: scoreTable[0].length + totalTable[0].length,
+          itemBuilder: (BuildContext context, int index) {
+            List<Widget> rowItems = new List();
+            for(int x = 0; x < scoreTable.length; x++) {
+              if(index % 2 == 0){
+                rowItems.add(
+                  Container(
+                    width: 200,
+                    child: Text(totalTable[x][index~/2].toString()),
+                    padding: EdgeInsets.all(40),
+                    margin: EdgeInsets.all(4),
+                    color: Colors.green[100],
+                ));
+              }
+              else {
+                rowItems.add(
+                  Container(
+                    width: 200,
+                    child: Text("+ " + scoreTable[x][(index-1)~/2].toString()),
+                    padding: EdgeInsets.all(40),
+                    margin: EdgeInsets.all(4),
+                    color: Colors.green[100],
+                ));
+              }
+            }
+            return Row(
+              children: rowItems,
+              /*<Widget> [
+              Container(
+              width: 200,
+              child: Text(scoreTable[index*4]),
+              padding: EdgeInsets.all(40),
+              color: Colors.green[100],
+            ),
+              Container(
+              width: 200,
+              child: Text(scoreTable[index*4 + 1]),
+              padding: EdgeInsets.all(40),
+              color: Colors.green[100],
+            ),
+              Container(
+              width: 200,
+              child: Text(scoreTable[index*4 + 2]),
+              padding: EdgeInsets.all(40),
+              color: Colors.green[100],
+            ),
+              Container(
+              width: 200,
+              child: Text(scoreTable[index*4 + 3]),
+              padding: EdgeInsets.all(40),
+              color: Colors.green[100],
+            ),
+            ]*/
+            );
+          }
+)));/*CustomScrollView(
+scrollDirection: Axis.vertical,
+shrinkWrap: true,
+slivers: sliver
+);*/
+  /*return CustomScrollView(
+  scrollDirection: Axis.horizontal,
+  shrinkWrap: true,
+  slivers: sliver
+);*/
+}
+}
